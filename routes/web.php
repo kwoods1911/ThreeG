@@ -24,8 +24,8 @@ Route::get('/services', 'App\Http\Controllers\PagesController@services');//KW Ro
 Route::get('/show-pdf/{id}','App\Http\Controllers\PagesController@viewpdf');
 
 
-Route::get('/managepackages/create/{originaltrackingnumer}','App\Http\Controllers\ManagePackagesTest@create');
-
+Route::get('/managepackages/create/{id}','App\Http\Controllers\ManagePackagesTest@create');
+// Route::get('/managepackages/store/{id}','App\Http\Controllers\ManagePackagesTest@store');
 
 
 Auth::routes();

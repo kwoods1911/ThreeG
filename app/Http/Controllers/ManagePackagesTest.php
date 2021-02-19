@@ -11,4 +11,18 @@ class ManagePackagesTest extends Controller
         $customerPackages = CustomerPackage::find($id);
         return view("managepackages.create")->with('customerpackage',$customerPackages);
     }
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function store(Request $request){
+        
+
+        
+        // return redirect('/managepackages');
+    }
 }

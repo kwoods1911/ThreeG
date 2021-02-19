@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ReceivedPackages;
 use App\Models\CustomerPackage;
 
 class ManagePackagesController extends Controller
@@ -49,7 +50,21 @@ class ManagePackagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'originaltrackingnumber' => 'required',
+            'customername' => 'required',
+            'packagedescription' => 'required',
+            'packageweight' => 'required',
+            'dateofarrival' => 'required',
+            'dateofshipment' => 'required'
+        ]);
+
+        $package = new ReceivedPackages;
+        $package-> 
+        
+
+        return redirect('/managepackages')->with('success', 'Package Record Created.');
+
     }
 
     /**
