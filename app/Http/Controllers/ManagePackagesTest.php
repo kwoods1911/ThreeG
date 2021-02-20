@@ -20,9 +20,7 @@ class ManagePackagesTest extends Controller
      */
 
     public function store(Request $request){
-        
-
-        
-        // return redirect('/managepackages');
+                
+        return redirect('/managepackages/index');
     }
 }

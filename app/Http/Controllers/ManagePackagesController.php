@@ -37,9 +37,8 @@ class ManagePackagesController extends Controller
         //KW - invoke this function to create a record that the package has been received.
         //KW populate form with trackining number data.
         //KW store record of package in database.
-        // $customerPackages = CustomerPackage::find($id);
-
-        // return view('managepackages.create');
+        $customerPackages = CustomerPackage::all();
+        return view('managepackages.create');
     }
 
     /**
@@ -50,17 +49,42 @@ class ManagePackagesController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request,[
+            'customerid' => 'required',
             'originaltrackingnumber' => 'required',
             'customername' => 'required',
             'packagedescription' => 'required',
             'packageweight' => 'required',
+            'locationstatus' => 'required',
             'dateofarrival' => 'required',
-            'dateofshipment' => 'required'
+            'dateofshipment' => 'required',
+            'customer_invoice' => 'nullable|mimes:pdf,xlx,csv|max:2048',
         ]);
 
+        if($request->hasFile('customer_invoice')){
+            $fileNameToStore =$request->input('packagedescription').''. time().'.'.$request->file('customer_invoice')->extension();  
+            $request->file('customer_invoice')->move(public_path('public/customer_invoices'), $fileNameToStore);
+        }else{
+            $fileNameToStore = 'noinvoice.pdf';//KW - default pdf file.
+        }
+
         $package = new ReceivedPackages;
-        $package-> 
+        $package->managerid = auth()->user()->id;
+        $package->managername = auth()->user()->name;
+        $package->newtrackingnumberbarcode = $request->input('originaltrackingnumber');
+        $package->customerid = $request->input('customerid');
+        $package->customername = $request->input('customername');
+        $package->packagedescription = $request->input('packagedescription');
+        $package->dateofarrival = $request->input('dateofarrival');
+        $package->dateofdeparture = $request->input('dateofshipment');
+        $package->locationstatus = $request->input('locationstatus');
+        $package->originaltrackingnumber = $request->input('originaltrackingnumber');
+        $package->deliverycustomercollection = $request->input('deliverycustomercollection');
+        $package->customer_invoice = $fileNameToStore;
+
+        $package->save();
+        
         
 
         return redirect('/managepackages')->with('success', 'Package Record Created.');

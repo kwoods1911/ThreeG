@@ -5,6 +5,12 @@
 <a href="/managepackages">Go Back</a>
 
 {!! Form::open(['action' => 'App\Http\Controllers\ManagePackagesController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+
+<div class="form-group">
+    {{Form::label('customerid', 'Customer id')}} <span>:</span>
+    {{Form::text('customerid',$customerpackage->id,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
+</div>
+
 <div class="form-group">
     {{Form::label('originaltrackingnumber', 'Tracking Number')}} <span>:</span>
     {{Form::text('originaltrackingnumber',$customerpackage->originaltrackingnumber,['class' => 'form-control', 'placeholder' => 'Tracking Number'])}}
@@ -25,6 +31,25 @@
     {{Form::label('packageweight', 'Package Weight')}} <span>:</span>
     {{Form::number('packageweight','',['class' => 'form-control', 'placeholder' => '0.00'])}}
 </div>
+
+
+<div class="form-group">
+    {{Form::label('locationstatus', 'Location Status of Package')}} <span>:</span>
+    {{Form::select('locationstatus', ['Miami Warehouse' => 'Miami Warehouse', 'Nassau Warehouse' => 'Nassau Warehouse'], 'Miami Warehouse')}}
+</div>
+
+<div class="form-group">
+    {{Form::label('originaltrackingnumber', 'Original tracking number')}} <span>:</span>
+    {{Form::text('originaltrackingnumber',$customerpackage->originaltrackingnumber,['class' => 'form-control', 'placeholder' => 'Package Description'])}}
+</div>
+
+
+<div class="form-group">
+    {{Form::label('deliverycustomercollection', 'Delivery Method')}} <span>:</span>
+    {{Form::select('deliverycustomercollection', ['Pick Up' => 'Pick Up', 'Delivery' => 'Delivery'], $customerpackage->delivery_method)}}
+</div>
+
+{{Form::file('customer_invoice')}}
 
 <div class="form-group">
     {{Form::label('dateofarrival', 'Date of arrival')}} <span>:</span>

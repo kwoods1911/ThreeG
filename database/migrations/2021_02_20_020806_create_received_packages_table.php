@@ -15,15 +15,18 @@ class CreateReceivedPackagesTable extends Migration
     {
         Schema::create('received_packages', function (Blueprint $table) {
             $table->id();
-            $table->string('newtrackingnumber/barcode');
+            $table->string('managerid');
+            $table->string('managername');
             $table->string('customerid');
             $table->string('customername');
+            $table->string('newtrackingnumberbarcode');
             $table->string('packagedescription');
             $table->date('dateofarrival');
             $table->date('dateofdeparture');
             $table->string('locationstatus');
             $table->string('originaltrackingnumber');
-            $table->string('delivery/customercollection');
+            $table->string('deliverycustomercollection');
+            $table->string('customer_invoice');
             $table->timestamps();
         });
     }
