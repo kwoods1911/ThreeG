@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ReceivedPackages;
 use App\Models\CustomerPackage;
+use DB;//KW - importing database class.
+
 
 class ManagePackagesController extends Controller
 {
@@ -17,6 +19,7 @@ class ManagePackagesController extends Controller
     /**
      * This controller is responsible for viewing the packages that the customer has uploaded.
      * Those packages need to be recorded as "Received" and stored in a another.
+     * Basically this controller manages all incomming packages.
      * 
      */
     public function index()
@@ -24,6 +27,9 @@ class ManagePackagesController extends Controller
         //KW- import all records from customer_packages database.
         //KW send records to managepackages.index
         $customerPackages = CustomerPackage::all();
+        //KW run a comparison to what exist already in the packages database.
+        //KW if the package already exists then filter it out from the results.
+
         return view('managepackages.index')->with('customerPackages',$customerPackages);
     }
 
@@ -49,7 +55,7 @@ class ManagePackagesController extends Controller
      */
     public function store(Request $request)
     {
-
+        //KW validating user input fields.
         $this->validate($request,[
             'customerid' => 'required',
             'originaltrackingnumber' => 'required',
@@ -59,17 +65,9 @@ class ManagePackagesController extends Controller
             'locationstatus' => 'required',
             'dateofarrival' => 'required',
             'dateofshipment' => 'required',
-            'customer_invoice' => 'nullable|mimes:pdf,xlx,csv|max:2048',
         ]);
 
-        if($request->hasFile('customer_invoice')){
-            $fileNameToStore =$request->input('packagedescription').''. time().'.'.$request->file('customer_invoice')->extension();  
-            $request->file('customer_invoice')->move(public_path('public/customer_invoices'), $fileNameToStore);
-        }else{
-            $fileNameToStore = 'noinvoice.pdf';//KW - default pdf file.
-        }
-
-        $package = new ReceivedPackages;
+        $package = new ReceivedPackages; 
         $package->managerid = auth()->user()->id;
         $package->managername = auth()->user()->name;
         $package->newtrackingnumberbarcode = $request->input('originaltrackingnumber');
@@ -80,14 +78,19 @@ class ManagePackagesController extends Controller
         $package->dateofdeparture = $request->input('dateofshipment');
         $package->locationstatus = $request->input('locationstatus');
         $package->originaltrackingnumber = $request->input('originaltrackingnumber');
-        $package->deliverycustomercollection = $request->input('deliverycustomercollection');
-        $package->customer_invoice = $fileNameToStore;
 
-        $package->save();
+        //KW running a query to pull additional package information from database.
+        $customerPackageDBInfo = DB::select("SELECT * FROM customer_packages WHERE id = $package->customerid");
+        //KW convert database information to sring
+        foreach ($customerPackageDBInfo as $packageInfo){
+            $invoice_result = $packageInfo->customer_invoice;
+            $customerselection_pickup_delivery = $packageInfo->delivery_method;
+        }
+        $package->deliverycustomercollection = $customerselection_pickup_delivery;
+        $package->customer_invoice = $invoice_result;
+        $package->save();//KW saving information to packages database.
         
-        
-
-        return redirect('/managepackages')->with('success', 'Package Record Created.');
+        return redirect('/managepackages')->with('success', "Package successfully received !");
 
     }
 
