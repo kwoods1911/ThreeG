@@ -70,7 +70,7 @@ class ManagePackagesController extends Controller
         $package = new ReceivedPackages; 
         $package->managerid = auth()->user()->id;
         $package->managername = auth()->user()->name;
-        $package->newtrackingnumberbarcode = $request->input('originaltrackingnumber');
+        $package->newtrackingnumberbarcode = $request->input('newtrackingnumber');
         $package->customerid = $request->input('customerid');
         $package->customername = $request->input('customername');
         $package->packagedescription = $request->input('packagedescription');
@@ -78,6 +78,7 @@ class ManagePackagesController extends Controller
         $package->dateofdeparture = $request->input('dateofshipment');
         $package->locationstatus = $request->input('locationstatus');
         $package->originaltrackingnumber = $request->input('originaltrackingnumber');
+        $package->package_weight = $request->input('packageweight');
 
         //KW running a query to pull additional package information from database.
         $customerPackageDBInfo = DB::select("SELECT * FROM customer_packages WHERE id = $package->customerid");

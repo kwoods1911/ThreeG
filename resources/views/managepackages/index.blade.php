@@ -4,7 +4,7 @@
 
 <h1>Inventory</h1>
 
-<a href="#">View Inventory</a>
+<a href="#">View Incomming Packagesy</a>
 
 <p>Show table of incomming packages.</p>
 

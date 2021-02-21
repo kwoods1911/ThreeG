@@ -39,6 +39,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //Kw - creating a route for each function that exists in the CustomerPackagesController
 Route::resource('customerpackage','App\Http\Controllers\CustomerPackagesController');//KW full path name is needed.
 Route::resource('managepackages','App\Http\Controllers\ManagePackagesController');
+Route::resource('inventorymanagement','App\Http\Controllers\InventoryManagementController');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

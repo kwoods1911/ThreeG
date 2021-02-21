@@ -27,8 +27,8 @@
                                 <a href="/managepackages">Incomming Packages</a>    
                             </li>
                             <li>
-                                {{--  ReceivedPackages Controller --}}
-                                <a href="#">View Inventory</a>    
+                                {{--  InventoryManagement Controller --}}
+                                <a href="/inventorymanagement">View Inventory</a>    
                             </li>
                             <li>
                                 {{-- GenerateReport Controller --}}

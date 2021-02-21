@@ -23,12 +23,12 @@
 
 <div class="form-group">
     <p>Upload Invoice for your package:</p> --}}
-    
+     
 {{-- {{Form::file('customer_invoice')}} --}}
 {{-- </div> --}}
 {{-- PUT method is overriding the POST method for updating package details --}}
-{{-- {{Form::hidden('_method','PUT')}} --}}
+{{Form::hidden('_method','PUT')}}
 
 {{-- {{Form::submit('Submit',['class' => 'btn btn-primary'])}} --}}
 {{-- {!! Form::close() !!} --}}
-{{-- @endsection --}}
+@endsection
