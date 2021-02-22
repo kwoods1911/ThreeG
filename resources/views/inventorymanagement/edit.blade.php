@@ -9,15 +9,24 @@
 </div>
 <h6>
     Three G Tracking # {{ $package->newtrackingnumberbarcode}}
+    {{Form::hidden('newtrackingnumber',$package->newtrackingnumberbarcode,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
 </h6>
 
 <h6>
     Original Tracking # {{$package->originaltrackingnumber}}
+    {{Form::hidden('originaltrackingnumber',$package->originaltrackingnumber,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
 </h6>
 
-<h6>Customer Name: {{$package->customername}}</h6>
+<h6>
+    Customer Name: {{$package->customername}}
+    {{Form::hidden('customername',$package->customername,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
+</h6>
 
-<h6>Package Description: {{$package->packagedescription}}</h6>
+<h6>
+    Package Description: {{$package->packagedescription}}
+    {{Form::hidden('customername',$package->packagedescription,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
+    
+</h6>
 
 <div class="form-group">
     {{Form::label('packageweight', 'Package Weight')}} <span>:</span>
@@ -26,7 +35,7 @@
 
 <div class="form-group">
     {{Form::label('locationstatus', 'Location Status of Package')}} <span>:</span>
-    {{Form::select('locationstatus', ['Miami Warehouse' => 'Miami Warehouse', 'Nassau Warehouse' => 'Nassau Warehouse'], 'Miami Warehouse')}}
+    {{Form::select('locationstatus', ['Miami Warehouse' => 'Miami Warehouse', 'Nassau Warehouse' => 'Nassau Warehouse','ITN' => 'In transit to Nassau'], $package->deliverycustomercollection)}}
 </div>
 
 {{-- <div class="form-group">
@@ -43,6 +52,6 @@
     {{Form::label('dateofshipment', 'Date of shipment')}} <span>:</span>
     {{Form::date('dateofshipment', \Carbon\Carbon::now())}}
 </div>
-{{Form::submit('Receive Package',['class' => 'btn btn-primary'])}}
+{{Form::submit('Edit Shipment Detail',['class' => 'btn btn-primary'])}}
 {!! Form::close() !!}
 @endsection

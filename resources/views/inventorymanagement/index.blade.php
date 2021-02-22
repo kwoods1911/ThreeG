@@ -19,37 +19,33 @@
 </form>
     <table class=" table table-striped table-hover">
             <tr>
-                
-                <th>Origi Tracking #</th>
+                {{-- <th>Origi Tracking #</th> --}}
                 <th>Three G - Tracking #</th>
                 <th>Customer Id</th>
                 <th>Customer Name</th>
                 <th>Package Description</th>
-                <th>Package Details</th>
-                {{-- <th>Customer Invoice</th> --}}
-                <th>Prepare Shipment</th>
+                <th>Ship. Details</th>
+                <th>Edit Details</th>
+                <th>Create Invoice</th>
+                <th>Delete</th>
             </tr>
             @if(count($inventorypackages) > 0)
                     @foreach ($inventorypackages as $package)
                         <tr>
-                            <td>{{$package->originaltrackingnumber}}</td>
+                            {{-- <td>{{$package->originaltrackingnumber}}</td> --}}
                             <td>{{$package->newtrackingnumberbarcode}}</td>
                             <td>{{$package->customerid}}</td>
                             <td>{{$package->customername}}</td>
                             <td>{{$package->packagedescription}}</td>
-                            <td><a href="#" class="btn btn-info">Details</a></td>
-                            {{-- <td><a href="#" class="btn btn-primary">Invoice</a></td> --}}
-                            <td><a href="/inventorymanagement/{{$package->id}}/edit" class="btn btn-primary">Prep. Ship.</a></td>
-                            <td></td> 
+                            <td><a href="/inventorymanagement/{{$package->id}}" class="btn btn-info">Details</a></td>
+                            <td><a href="/inventorymanagement/{{$package->id}}/edit" class="btn btn-primary">Edit Ship.</a></td>
+                            <td><a href="#" class="btn btn-primary">Create Inv.</a></td> 
+                            <td><a href="#" class="btn btn-danger">Delete</a></td>
                         </tr>
                     @endforeach
-            
             @endIf
 
-            {{-- {!!Form::open(['action' => ['App\Http\Controllers\ManagePackagesController@destroy', $package->id], 'method' => 'POST'])!!} --}}
-            {{-- {{Form::hidden('_method','DELETE')}} --}}
-            {{-- {{Form::submit('Discard',['class' => 'btn btn-danger'])}} --}}
-            {{-- {!!Form::close()!!} --}}
 </table>
 
 @endsection
+

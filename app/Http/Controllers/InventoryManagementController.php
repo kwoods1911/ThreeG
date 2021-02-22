@@ -47,7 +47,8 @@ class InventoryManagementController extends Controller
      */
     public function show($id)
     {
-        //
+        $package = ReceivedPackages::find($id);
+        return view("inventorymanagement.show")->with('package',$package);
     }
 
     /**
@@ -71,7 +72,24 @@ class InventoryManagementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $package = ReceivedPackages::find($id);
+
+        $this->validate($request,[
+            'packageweight' => 'required',
+            'locationstatus'=> 'required',
+            'packagedescription' => 'required',
+            'dateofarrival' => 'required',
+            'dateofshipment' => 'required'
+        ]);
+
+        $package->package_weight = $request->input('packageweight');
+        $package->packagedescription = $request->input('packagedescription');
+        $package->locationstatus = $request->input('locationstatus');
+        $package->dateofarrival = $request->input('dateofarrival');
+        $package->dateofdeparture = $request->input('dateofshipment');
+        $package->save();
+
+        return redirect('/inventorymanagement')->with('success','Package Details Updated !');
     }
 
     /**

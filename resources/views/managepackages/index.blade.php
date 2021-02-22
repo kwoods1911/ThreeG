@@ -2,11 +2,11 @@
 
 @section('content')
 
-<h1>Inventory</h1>
+<h1>Incomming Packages</h1>
 
-<a href="#">View Incomming Packagesy</a>
+<a href="/home">Go Back</a>
 
-<p>Show table of incomming packages.</p>
+<p>Search and filter for packages</p>
 
 <form action="">
     <label for="">Search Original Tracking #:</label>
