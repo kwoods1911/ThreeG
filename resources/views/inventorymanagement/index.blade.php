@@ -39,7 +39,7 @@
                             <td>{{$package->packagedescription}}</td>
                             <td><a href="/inventorymanagement/{{$package->id}}" class="btn btn-info">Details</a></td>
                             <td><a href="/inventorymanagement/{{$package->id}}/edit" class="btn btn-primary">Edit Ship.</a></td>
-                            <td><a href="#" class="btn btn-primary">Create Inv.</a></td> 
+                            <td><a href="/invoicemanagement/createinvoice/{{$package->id}}" class="btn btn-primary">Create Inv.</a></td> 
                             <td><a href="#" class="btn btn-danger">Delete</a></td>
                         </tr>
                     @endforeach

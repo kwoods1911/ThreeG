@@ -155,7 +155,7 @@ class CustomerPackagesController extends Controller
             //KW match user id with correct package
             
             // $name = $users->getName();
-            $customerPackages->customerid = '456';
+            $customerPackages->customerid = '456';//KW write script to generate customer ID.
             $customerPackages->customername = auth()->user()->name;
             $customerPackages->newtrackingnumber = $customerPackages->newtrackingnumber;
             $customerPackages->originaltrackingnumber = $request->input('originaltrackingnumber');

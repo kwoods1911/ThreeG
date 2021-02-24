@@ -27,6 +27,12 @@ Route::get('/show-pdf/{id}','App\Http\Controllers\PagesController@viewpdf');
 Route::get('/managepackages/create/{id}','App\Http\Controllers\ManagePackagesTest@create');
 // Route::get('/managepackages/store/{id}','App\Http\Controllers\ManagePackagesTest@store');
 
+//KW route for creating invoice.
+Route::get('/invoicemanagement/createinvoice/{id}','App\Http\Controllers\InvoiceController@createInvoice');
+
+
+Route::resource('invoicemanagement','App\Http\Controllers\ModifyInvoiceController');
+
 
 Auth::routes();
 
