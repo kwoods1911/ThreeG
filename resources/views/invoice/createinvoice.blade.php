@@ -6,6 +6,12 @@
     <h3>Manager Name: {{$package->managername}} </h3>
 
 {!! Form::open(['action' => 'App\Http\Controllers\ModifyInvoiceController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+
+<div class="form-group">
+    {{Form::label('packageid', 'Package Id')}} <span>:</span>
+    {{Form::text('packageid',$package->id,['placeholder' => 'id'])}}
+</div>
+
 <div class="form-group">
     {{Form::label('itemvalue', 'Item Value')}} <span>:</span>
     {{Form::number('itemvalue','',['placeholder' => 0.00])}}
@@ -13,7 +19,7 @@
 
 <div class="form-group">
     {{Form::label('customdutyrate', 'Custom Duty Rate')}} <span>:</span>
-    {{Form::text('customdutyrate','',['placeholder' => 'Custom Duty Rate'])}}
+    {{Form::number('customdutyrate','',['placeholder' => 0.00])}}
 </div>
 
 <div class="form-group">
@@ -24,14 +30,14 @@
 
 <div class="form-group">
     {{Form::label('shippingrate', 'Shipping Rate')}} <span>:</span>
-    {{Form::number('shippingrate','',['placeholder' => 0.00])}}
+    {{Form::number('shippingrate',1.20,['placeholder' => 0.00])}}
 </div>
 
 <div class="form-group">
     {{Form::label('packageweight', 'Package Weight')}} <span>:</span>
-    {{Form::number('packageweight',$package->package_weight,['placeholder' => 0.00])}}
+    {{Form::number('packageweight',$package->package_weight,['placeholder' => 0.00])}}<span>(LBS)</span>
 </div>
 
-{{Form::submit('Submit',['class' => 'btn btn-primary'])}}
+{{Form::submit('Calculate',['class' => 'btn btn-primary'])}}
 {!! Form::close() !!}
 @endsection

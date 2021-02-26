@@ -7,14 +7,11 @@ use App\Models\ReceivedPackages;
 class InvoiceController extends Controller
 {
     //KW - create routes to 
-
     public function createInvoice($id){
         //KW - function responsible for creating invoices
         $package = ReceivedPackages::find($id);
         return view('invoice.createinvoice')->with('package',$package);
     }
-
-
     /**
      * Store a newly created resource in storage.
      *

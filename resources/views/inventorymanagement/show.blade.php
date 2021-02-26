@@ -6,6 +6,8 @@
 <h4>Manager ID: {{$package->managerid}}</h4>
 <h4>Manager Name: {{$package->managername}}</h4>
 
+
+
 <table class="table">
     <tr>
         <th>Package ID</th>
@@ -48,7 +50,7 @@
 
     <tr>
         <th>View Final Invoice</th>
-        <td><a href="#" class="btn btn-primary">View Invoice</a></td>
+        <td><a href="/invoicemanagement/{{$package->id}}" class="btn btn-primary">View Invoice</a></td>
     </tr>
 </table>
 

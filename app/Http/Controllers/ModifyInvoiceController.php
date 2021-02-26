@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ReceivedPackages;
+use App\Models\ThreeG_Invoices;
 class ModifyInvoiceController extends Controller
 {
     /**
@@ -36,9 +37,50 @@ class ModifyInvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
 
-        return "123";
+        //KW - adding logic to store information
+        $this->validate($request,[
+            'packageid' => 'required',
+            'itemvalue' => 'required',
+            'customdutyrate' => 'required',
+            'itemcategory' => 'required',
+            'shippingrate'=> 'required',
+            'packageweight' => 'required'
+        ]);
+
+        $customerPackage = ReceivedPackages::find($request->input('packageid'));
+
+        //KW capture user inputs in variables
+        $itemValue = $request->input('item_value');
+        $shippingRate = $request->input('shippingrate');
+        $customDutyRate = $request->input('customdutyrate');
+        $shippingRate = $request->input('shippingrate');
+        $packageWeight = $request->input('packageweight');
+        
+        $vatTax = $itemValue * 0.12;
+        $customsTax = $itemValue * $customDutyRate;
+        $shippingCost = ($itemValue * $shippingRate);
+        $customsVAT = $customsTax * 0.12;
+        
+        $processingFee = 10;
+        $totalCost = $shippingCost + $customsTax + $customsVAT + $processingFee;    
+
+        $invoice = new ThreeG_Invoices;
+        $invoice->packageid = $request->input('packageid');
+        $invoice->managerid = $customerPackage->managerid;
+        $invoice->package_description = $customerPackage->packagedescription;
+        $invoice->customer_name = $customerPackage->customername;
+        $invoice->package_tracking_number = $customerPackage->newtrackingnumberbarcode;
+        $invoice->shipping_cost = $shippingCost;
+        $invoice->item_value = $request->input('itemvalue');
+        $invoice->vat_tax = $vatTax;
+        $invoice->customs_tax = $customsTax;
+        $invoice->customs_vat = $customsVAT;
+        $invoice->customs_tax_rate = $customDutyRate;
+        $invoice->total_cost = $totalCost;
+        $invoice->save();
+        return redirect('/inventorymanagement')->with('success','Invoice Created !');
     }
 
     /**
@@ -50,6 +92,15 @@ class ModifyInvoiceController extends Controller
     public function show($id)
     {
         //
+        // $package = ReceivedPackages::find($id);
+        //find invoice number
+        // return view('invoice.showinvoice')->with('package',$package);
+
+        $package = ReceivedPackages::find($id);
+        $invoice = ThreeG_Invoices::where('packageid',$package->id)->firstOrFail();
+        return view('invoice.showinvoice')->with('invoice',$invoice);
+
+        // return view('invoice.showinvoice');
     }
 
     /**
