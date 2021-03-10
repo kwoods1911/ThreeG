@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ReceivedPackages;
 use App\Models\ThreeG_Invoices;
+
+use DB;
 class ModifyInvoiceController extends Controller
 {
     /**
@@ -63,7 +65,7 @@ class ModifyInvoiceController extends Controller
         $shippingCost = ($itemValue * $shippingRate);
         $customsVAT = $customsTax * 0.12;
         
-        $processingFee = 10;
+        $processingFee = 10;//KW constant
         $totalCost = $shippingCost + $customsTax + $customsVAT + $processingFee;    
 
         $invoice = new ThreeG_Invoices;
@@ -79,6 +81,7 @@ class ModifyInvoiceController extends Controller
         $invoice->customs_vat = $customsVAT;
         $invoice->customs_tax_rate = $customDutyRate;
         $invoice->total_cost = $totalCost;
+        $invoice->package_weight = $packageWeight;
         $invoice->save();
         return redirect('/inventorymanagement')->with('success','Invoice Created !');
     }
@@ -111,7 +114,12 @@ class ModifyInvoiceController extends Controller
      */
     public function edit($id)
     {
-        //
+        //KW run query on threeg_invoice database to find invoice number that corresponds to package number
+        // $invoice = ThreeG_Invoices::find($id);
+        $invoice = DB::select("SELECT * FROM threeg_invoice WHERE packageid = $id");
+        // fetch_assoc
+        $package = ReceivedPackages::find($id);
+        return view('invoice.updateinvoice')->with('invoice',$invoice)->with('package',$package);
     }
 
     /**
@@ -123,7 +131,53 @@ class ModifyInvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
+        //KW - adding logic to update information
+        $this->validate($request,[
+            'packageid' => 'required',
+            'itemvalue' => 'required',
+            'customdutyrate' => 'required',
+            'itemcategory' => 'required',
+            'shippingrate'=> 'required',
+            'packageweight' => 'required'
+        ]);
+
+        $invoice = ThreeG_Invoices::find($request->input('invoicenum'));
+        
+        //KW capture user inputs in variables
+        $itemValue = $request->input('item_value');
+        $shippingRate = $request->input('shippingrate');
+        $customDutyRate = $request->input('customdutyrate');
+        $shippingRate = $request->input('shippingrate');
+        $packageWeight = $request->input('packageweight');
+        
+        $vatTax = $itemValue * 0.12;
+        $customsTax = $itemValue * $customDutyRate;
+        $shippingCost = ($itemValue * $shippingRate);
+        $customsVAT = $customsTax * 0.12;
+        
+        $processingFee = 10;//KW constant
+        $totalCost = $shippingCost + $customsTax + $customsVAT + $processingFee;    
+
+       
+        $invoice->packageid = $request->input('packageid');
+        $invoice->managerid = $customerPackage->managerid;
+        $invoice->package_description = $customerPackage->packagedescription;
+        $invoice->customer_name = $customerPackage->customername;
+        $invoice->package_tracking_number = $customerPackage->newtrackingnumberbarcode;
+        $invoice->shipping_cost = $shippingCost;
+        $invoice->item_value = $request->input('itemvalue');
+        $invoice->vat_tax = $vatTax;
+        $invoice->customs_tax = $customsTax;
+        $invoice->customs_vat = $customsVAT;
+        $invoice->customs_tax_rate = $customDutyRate;
+        $invoice->total_cost = $totalCost;
+        $invoice->package_weight = $packageWeight;
+        $invoice->save();
+        return redirect('/inventorymanagement')->with('success','Invoice Updated !');
+
+
+
     }
 
     /**

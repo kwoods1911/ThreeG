@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPackageWeightToReceivedPackages extends Migration
+class AddPackageWeightToThreegInvoice extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddPackageWeightToReceivedPackages extends Migration
      */
     public function up()
     {
-        Schema::table('received_packages', function (Blueprint $table) {
+        Schema::table('threeg_invoice', function (Blueprint $table) {
             $table->integer('package_weight');
         });
     }
@@ -25,8 +25,8 @@ class AddPackageWeightToReceivedPackages extends Migration
      */
     public function down()
     {
-        Schema::table('received_packages', function (Blueprint $table) {
-            $table->dropColumn('package_weight');
+        Schema::table('threeg_invoice', function (Blueprint $table) {
+            // $table->dropColumn('package_weight');
         });
     }
 }

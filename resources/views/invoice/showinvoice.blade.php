@@ -25,10 +25,6 @@
 <p>Customer Email: </p>
 
 
-
-
-
-
 <a href="#" class="btn btn-primary">Download Invoice</a>
 
 <table class="table">

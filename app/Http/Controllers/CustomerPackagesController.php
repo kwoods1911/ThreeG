@@ -116,7 +116,6 @@ class CustomerPackagesController extends Controller
     public function edit($id)
     {
         $customerPackages = CustomerPackage::find($id);
-
         if(auth()->user()->id !== $customerPackages->user_id){
             return redirect('/customerpackage')->with('error','Unauthorized page.');
         }
@@ -153,7 +152,6 @@ class CustomerPackagesController extends Controller
                 
 
             //KW match user id with correct package
-            
             // $name = $users->getName();
             $customerPackages->customerid = '456';//KW write script to generate customer ID.
             $customerPackages->customername = auth()->user()->name;
