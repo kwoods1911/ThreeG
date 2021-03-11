@@ -14,14 +14,18 @@ class CreateThreegInvoiceTable extends Migration
     public function up()
     {
         Schema::create('threeg_invoice', function (Blueprint $table) {
-            $table->id('invoice_num');
+            $table->id();
             $table->string('packageid');
             $table->string('managerid');
             $table->mediumText('package_description');
             $table->string('customer_name');
             $table->string('package_tracking_number');
+            $table->integer('package_weight');
+            $table->string('item_category');
             $table->double('shipping_cost');
             $table->double('vat_tax');
+            $table->double('customs_tax_rate');
+            $table->double('item_value');
             $table->double('customs_tax');
             $table->double('customs_vat');
             $table->double('total_cost');

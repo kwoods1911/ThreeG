@@ -48,13 +48,14 @@ class ModifyInvoiceController extends Controller
             'customdutyrate' => 'required',
             'itemcategory' => 'required',
             'shippingrate'=> 'required',
-            'packageweight' => 'required'
+            'packageweight' => 'required',
+            'itemvalue' => 'required'
         ]);
 
         $customerPackage = ReceivedPackages::find($request->input('packageid'));
 
         //KW capture user inputs in variables
-        $itemValue = $request->input('item_value');
+        $itemValue = $request->input('itemvalue');
         $shippingRate = $request->input('shippingrate');
         $customDutyRate = $request->input('customdutyrate');
         $shippingRate = $request->input('shippingrate');
@@ -68,6 +69,7 @@ class ModifyInvoiceController extends Controller
         $processingFee = 10;//KW constant
         $totalCost = $shippingCost + $customsTax + $customsVAT + $processingFee;    
 
+        // $invoice = ThreeG_Invoices::find($request->input('invoiceid'));
         $invoice = new ThreeG_Invoices;
         $invoice->packageid = $request->input('packageid');
         $invoice->managerid = $customerPackage->managerid;
@@ -76,6 +78,7 @@ class ModifyInvoiceController extends Controller
         $invoice->package_tracking_number = $customerPackage->newtrackingnumberbarcode;
         $invoice->shipping_cost = $shippingCost;
         $invoice->item_value = $request->input('itemvalue');
+        $invoice->item_category = $request->input('itemcategory');
         $invoice->vat_tax = $vatTax;
         $invoice->customs_tax = $customsTax;
         $invoice->customs_vat = $customsVAT;
@@ -83,7 +86,7 @@ class ModifyInvoiceController extends Controller
         $invoice->total_cost = $totalCost;
         $invoice->package_weight = $packageWeight;
         $invoice->save();
-        return redirect('/inventorymanagement')->with('success','Invoice Created !');
+        return redirect('/inventorymanagement')->with('success',"Invoice Created");
     }
 
     /**
@@ -139,13 +142,14 @@ class ModifyInvoiceController extends Controller
             'customdutyrate' => 'required',
             'itemcategory' => 'required',
             'shippingrate'=> 'required',
-            'packageweight' => 'required'
+            'packageweight' => 'required',
+            'itemvalue' => 'required'
         ]);
 
         $invoice = ThreeG_Invoices::find($request->input('invoicenum'));
         
         //KW capture user inputs in variables
-        $itemValue = $request->input('item_value');
+        $itemValue = $request->input('itemvalue');
         $shippingRate = $request->input('shippingrate');
         $customDutyRate = $request->input('customdutyrate');
         $shippingRate = $request->input('shippingrate');
@@ -171,12 +175,10 @@ class ModifyInvoiceController extends Controller
         $invoice->customs_tax = $customsTax;
         $invoice->customs_vat = $customsVAT;
         $invoice->customs_tax_rate = $customDutyRate;
-        $invoice->total_cost = $totalCost;
         $invoice->package_weight = $packageWeight;
+        $invoice->total_cost = $totalCost;
         $invoice->save();
         return redirect('/inventorymanagement')->with('success','Invoice Updated !');
-
-
 
     }
 
@@ -188,6 +190,9 @@ class ModifyInvoiceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //KW find invoice number
+        $invoice = ThreeG_Invoices::find($id);
+        $invoice->delete();
+        return redirect('/inventorymanagement')->with('success','Invoice Deleted!');
     }
 }

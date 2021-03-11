@@ -14,7 +14,7 @@
 
 <div class="form-group">
     {{Form::label('itemvalue', 'Item Value')}} <span>:</span>
-    {{Form::number('itemvalue','',['placeholder' => 0.00])}}
+    {{Form::number('itemvalue',0,['placeholder' => 0.00])}}
 </div>
 
 <div class="form-group">

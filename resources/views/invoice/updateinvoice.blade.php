@@ -8,15 +8,15 @@
     <p>
         Invoice: 
         {{-- {{$data['invoice']->item_value}} --}}
-    
+
     </p>
 
  
 
-{!! Form::open(['action' => 'App\Http\Controllers\ModifyInvoiceController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+{!! Form::open(['action' => 'App\Http\Controllers\ModifyInvoiceController@update', 'method' => 'POST']) !!}
 
 <div class="form-group">
-    {{Form::hidden('invoiceid',$invoice[0]->invoice_num,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
+    {{Form::hidden('invoiceid',$invoice[0]->id,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
 </div>
 <div class="form-group">
     {{Form::label('packageid', 'Package Id')}} <span>:</span>
@@ -30,12 +30,12 @@
 
 <div class="form-group">
     {{Form::label('customdutyrate', 'Custom Duty Rate')}} <span>:</span>
-    {{Form::number('customdutyrate','',['placeholder' => 0.00])}}
+    {{Form::number('customdutyrate',$invoice[0]->customs_tax_rate,['placeholder' => 0.00])}}
 </div>
 
 <div class="form-group">
     {{Form::label('itemcategory', 'Item Category')}} <span>:</span>
-    {{Form::text('itemcategory','',['placeholder' => 'e.g Electronics'])}}
+    {{Form::text('itemcategory',$invoice[0]->item_category,['placeholder' => 'e.g Electronics'])}}
 </div>
 
 
@@ -48,7 +48,7 @@
     {{Form::label('packageweight', 'Package Weight')}} <span>:</span>
     {{Form::number('packageweight',$invoice[0]->package_weight,['placeholder' => 0.00])}}<span>(LBS)</span>
 </div>
-
+{{Form::hidden('_method','PUT')}}
 {{Form::submit('Update Invoice',['class' => 'btn btn-primary'])}}
 {!! Form::close() !!}
 @endsection

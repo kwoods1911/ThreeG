@@ -57,14 +57,12 @@
         <th>View Invoice</th>
         <th>Create Invoice</th>
         <th>Update Invoice</th>
-        <th>Delete invoice</th>
     </tr>
 
     <tr>
         <td><a href="/invoicemanagement/{{$package->id}}" class="btn btn-primary">View Invoice</a></td>
         <td><a href="/invoicemanagement/createinvoice/{{$package->id}}" class="btn btn-primary">Create Invoice</a></td>
         <td><a href="/invoicemanagement/{{$package->id}}/edit" class="btn btn-primary">Update Invoice</a></td>
-        <td><a href="#" class="btn btn-danger">Delete Invoice</a></td>
     </tr>
     
 </table>
