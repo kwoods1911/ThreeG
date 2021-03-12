@@ -12,8 +12,8 @@
     </p>
 
  
-
-{!! Form::open(['action' => 'App\Http\Controllers\ModifyInvoiceController@update', 'method' => 'POST']) !!}
+{{-- {!! Form::open(['action' => ['App\Http\Controllers\CustomerPackagesController@update',$customerPackages->id], 'method' => 'POST']) !!} --}}
+{!! Form::open(['action' => ['App\Http\Controllers\ModifyInvoiceController@update',$invoice[0]->id], 'method' => 'POST']) !!}
 
 <div class="form-group">
     {{Form::hidden('invoiceid',$invoice[0]->id,['class' => 'form-control', 'placeholder' => 'Customer id'])}}

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ReceivedPackages;
 use App\Models\ThreeG_Invoices;
-
 use DB;
+
 class ModifyInvoiceController extends Controller
 {
     /**
@@ -146,8 +146,8 @@ class ModifyInvoiceController extends Controller
             'itemvalue' => 'required'
         ]);
 
-        $invoice = ThreeG_Invoices::find($request->input('invoicenum'));
-        
+        $invoice = ThreeG_Invoices::find($id);
+        $customerPackage = ReceivedPackages::find($request->input('packageid'));
         //KW capture user inputs in variables
         $itemValue = $request->input('itemvalue');
         $shippingRate = $request->input('shippingrate');
@@ -162,7 +162,6 @@ class ModifyInvoiceController extends Controller
         
         $processingFee = 10;//KW constant
         $totalCost = $shippingCost + $customsTax + $customsVAT + $processingFee;    
-
        
         $invoice->packageid = $request->input('packageid');
         $invoice->managerid = $customerPackage->managerid;
@@ -193,6 +192,6 @@ class ModifyInvoiceController extends Controller
         //KW find invoice number
         $invoice = ThreeG_Invoices::find($id);
         $invoice->delete();
-        return redirect('/inventorymanagement')->with('success','Invoice Deleted!');
+        return redirect("/inventorymanagement")->with('success','Invoice Deleted!');
     }
 }

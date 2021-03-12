@@ -27,11 +27,13 @@ Route::get('/show-pdf/{id}','App\Http\Controllers\PagesController@viewpdf');
 Route::get('/managepackages/create/{id}','App\Http\Controllers\ManagePackagesTest@create');
 // Route::get('/managepackages/store/{id}','App\Http\Controllers\ManagePackagesTest@store');
 
+
+
 //KW route for creating invoice.
 Route::get('/invoicemanagement/createinvoice/{id}','App\Http\Controllers\InvoiceController@createInvoice');
 
 
-Route::resource('invoicemanagement','App\Http\Controllers\ModifyInvoiceController');
+
 
 
 Auth::routes();
@@ -46,6 +48,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('customerpackage','App\Http\Controllers\CustomerPackagesController');//KW full path name is needed.
 Route::resource('managepackages','App\Http\Controllers\ManagePackagesController');
 Route::resource('inventorymanagement','App\Http\Controllers\InventoryManagementController');
+Route::resource('invoicemanagement','App\Http\Controllers\ModifyInvoiceController');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

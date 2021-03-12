@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+
+@php
+    $processingFee = 10.00;
+    $subTotal = $invoice->shipping_cost + $invoice->item_value + $invoice->customs_tax + $processingFee;
+    $totalTaxes = (($invoice->shipping_cost) * 0.012)+ ($invoice->item_value * 0.012)+($invoice->customs_tax*0.012)+($processingFee * 0.012);
+
+@endphp
 <h1>THREE G SHIPPING LTD.</h1>
 <span>
     #123 Johnson St. Nassau
@@ -17,9 +24,9 @@
     <br>
     Customer ID:
     <br>
-    Customer Address
+    Customer Address:
     <br>
-    Phone number
+    Phone number:
 </Address>
 
 <p>Customer Email: </p>
@@ -46,34 +53,35 @@
     <tr>
         <td>Package Desc.
             <b>{{$invoice->package_description}}</b>
+            <span>CUSTOMS DUTY{{$invoice->customs_tax_rate * 100}} %</span>
         </td>
         <td>1</td>
         <td>{{$invoice->item_value}}</td>
-        <td>{{($invoice->item_value) * 0.12}}</td>
-        <td>{{($invoice->item_value) * 1.12}}</td>
+        <td>{{($invoice->item_value) * 0.012}}</td>
+        <td>{{($invoice->item_value) * 1.012}}</td>
     </tr>
     <tr>
         <td>Customs VAT(12%)</td>
         <td>1</td>
         <td>${{$invoice->customs_tax}}</td>
         <td>${{$invoice->customs_vat}}</td>
-        <td>${{$invoice->total_cost}}</td>
+        <td>${{$invoice->customs_tax + $invoice->customs_vat}}</td>
     </tr>
 
     <tr>
         <td>Processing</td>
         <td>1</td>
-        <td>$12.00</td>
-        <td>$14.11</td>
-        <td>$0.00</td>
+        <td>$ {{$processingFee}}</td>
+        <td>$ {{$processingFee * 0.012}}</td>
+        <td>$ {{$processingFee * 1.012}}</td>
     </tr>
 
     <tr>
         <td>Grand Total</td>
         <td>1</td>
-        <td>$ {{$invoice->total_cost}}</td>
-        <td>$ {{$invoice->total_cost}}</td>
-        <td>$ {{$invoice->total_cost}}</td>
+        <td>$ {{$subTotal}}</td>
+        <td>$ {{$totalTaxes}}</td>
+        <td>$ {{$subTotal + $totalTaxes}}</td>
     </tr>
  
 </table>
