@@ -1,13 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
-@php
-    $processingFee = 10.00;
-    $subTotal = $invoice->shipping_cost + $invoice->item_value + $invoice->customs_tax + $processingFee;
-    $totalTaxes = (($invoice->shipping_cost) * 0.012)+ ($invoice->item_value * 0.012)+($invoice->customs_tax*0.012)+($processingFee * 0.012);
-
-@endphp
+<a href="/inventorymanagement/{{$invoice->packageid}}" class="btn btn-primary">Go Back</a>
 <h1>THREE G SHIPPING LTD.</h1>
 <span>
     #123 Johnson St. Nassau
@@ -15,73 +9,56 @@
     Tel: 242-333-1290
 </span>
 <h1>NOT A RECEIPT</h1>
-<p>Invoice #{{$invoice->invoice_num}}</p>
-<p>Date: 21/01/2021 5:41PM</p>
-<p>Created By: Adebo Woods</p>
+<p>Invoice    #{{$invoice->id}}</p>
+<p>Date:       {{$invoice->created_at}}</p>
+<p>Created By: {{$invoice->manager_name}}</p>
 
-<Address>
-    Customer name: {{$invoice->customer_name}}
-    <br>
-    Customer ID:
-    <br>
-    Customer Address:
-    <br>
-    Phone number:
-</Address>
 
-<p>Customer Email: </p>
-
+<div>
+    <p>Customer ID: {{$invoice->customer_id}} </p>
+    <p>Customer Name: {{$invoice->customer_name}} </p>
+</div>
 
 <a href="#" class="btn btn-primary">Download Invoice</a>
-
 <table class="table">
     <tr>
         <th>Item</th>
-        <th>Qty</th>
         <th>Price</th>
         <th>VAT(12%)</th>
         <th>Total</th>
     </tr>
 
     <tr>
-        <td>Freight (insert package weight)</td>
-        <td>1</td>
-        <td>$ {{$invoice->shipping_cost}}</td>
-        <td>$ {{($invoice->shipping_cost) * 0.12}}</td>
-        <td>$ {{($invoice->shipping_cost) * 1.12}}</td>
+        <td>Freight: {{$invoice->package_weight}} (LBS)</td>
+        <td>$ {{round($invoice->shipping_cost,2)}} </td>
+        <td>$ {{round($invoice->shipping_cost_vat,2)}}</td>
+        <td>$ {{round($invoice->shipping_cost_total,2)}}</td>
     </tr>
     <tr>
         <td>Package Desc.
             <b>{{$invoice->package_description}}</b>
-            <span>CUSTOMS DUTY{{$invoice->customs_tax_rate * 100}} %</span>
+            <br>
+            <span>Item Value ${{round($invoice->item_value,2)}}</span>
+            <br>
+            <span>CUSTOMS DUTY {{$invoice->customs_rate}} %</span>
         </td>
-        <td>1</td>
-        <td>{{$invoice->item_value}}</td>
-        <td>{{($invoice->item_value) * 0.012}}</td>
-        <td>{{($invoice->item_value) * 1.012}}</td>
-    </tr>
-    <tr>
-        <td>Customs VAT(12%)</td>
-        <td>1</td>
-        <td>${{$invoice->customs_tax}}</td>
-        <td>${{$invoice->customs_vat}}</td>
-        <td>${{$invoice->customs_tax + $invoice->customs_vat}}</td>
+        <td>$ {{round($invoice->customs_tax_amount,2)}}</td>
+        <td>$ {{round($invoice->customs_tax_amount_vat,2)}}</td>
+        <td>$ {{round($invoice->customs_tax_total,2)}}</td>
     </tr>
 
     <tr>
         <td>Processing</td>
-        <td>1</td>
-        <td>$ {{$processingFee}}</td>
-        <td>$ {{$processingFee * 0.012}}</td>
-        <td>$ {{$processingFee * 1.012}}</td>
+        <td>$ {{round($invoice->processing_fee,2)}}</td>
+        <td>$ {{round($invoice->processing_fee_vat,2)}}</td>
+        <td>$ {{round($invoice->processing_fee_total,2)}}</td>
     </tr>
 
     <tr>
-        <td>Grand Total</td>
-        <td>1</td>
-        <td>$ {{$subTotal}}</td>
-        <td>$ {{$totalTaxes}}</td>
-        <td>$ {{$subTotal + $totalTaxes}}</td>
+        <td>Final</td>
+        <td>$ {{round($invoice->subtotal,2)}}</td>
+        <td>$ {{round($invoice->subtotal_vat,2)}}</td>
+        <td>$ {{round($invoice->final_total,2)}}</td>
     </tr>
  
 </table>

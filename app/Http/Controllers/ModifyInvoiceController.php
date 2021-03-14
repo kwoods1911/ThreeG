@@ -52,6 +52,10 @@ class ModifyInvoiceController extends Controller
             'itemvalue' => 'required'
         ]);
 
+            define("VAT_TAX_RATE",0.012); 
+            define("PROCESSING_FEE",10);
+
+        $invoice = new ThreeG_Invoices;
         $customerPackage = ReceivedPackages::find($request->input('packageid'));
 
         //KW capture user inputs in variables
@@ -61,30 +65,54 @@ class ModifyInvoiceController extends Controller
         $shippingRate = $request->input('shippingrate');
         $packageWeight = $request->input('packageweight');
         
-        $vatTax = $itemValue * 0.12;
-        $customsTax = $itemValue * $customDutyRate;
-        $shippingCost = ($itemValue * $shippingRate);
-        $customsVAT = $customsTax * 0.12;
-        
-        $processingFee = 10;//KW constant
-        $totalCost = $shippingCost + $customsTax + $customsVAT + $processingFee;    
+        //KW declare variables that need to be calculated.
+        $shippingCost = $packageWeight * $shippingRate;
+        $shippingCostVAT = $shippingCost * VAT_TAX_RATE;
+        $shippingCostFinal = $shippingCost + $shippingCostVAT;
 
-        // $invoice = ThreeG_Invoices::find($request->input('invoiceid'));
-        $invoice = new ThreeG_Invoices;
+        //KW calculate customs_rate
+        $customTaxAmount = $itemValue * ($customDutyRate/100);
+        $customTaxAmountVat = $customTaxAmount * VAT_TAX_RATE;
+        $customTaxFinal = $customTaxAmount + $customTaxAmountVat;
+
+        $processingFee = PROCESSING_FEE;
+        $processingFeeVat = PROCESSING_FEE * VAT_TAX_RATE;
+        $processingFeeVatTotal = $processingFee + $processingFeeVat;
+
+        $subTotal = $shippingCost + $customTaxAmount + $processingFee;
+        $subTotalVat = $shippingCostVAT + $customTaxAmountVat + $processingFeeVat;
+        $finalTotal = $shippingCostFinal + $customTaxFinal + $processingFeeVatTotal;
+
+
         $invoice->packageid = $request->input('packageid');
         $invoice->managerid = $customerPackage->managerid;
+        $invoice->manager_name = $customerPackage->managername;
         $invoice->package_description = $customerPackage->packagedescription;
+        $invoice->customer_id = $customerPackage->customerid;
         $invoice->customer_name = $customerPackage->customername;
         $invoice->package_tracking_number = $customerPackage->newtrackingnumberbarcode;
-        $invoice->shipping_cost = $shippingCost;
-        $invoice->item_value = $request->input('itemvalue');
-        $invoice->item_category = $request->input('itemcategory');
-        $invoice->vat_tax = $vatTax;
-        $invoice->customs_tax = $customsTax;
-        $invoice->customs_vat = $customsVAT;
-        $invoice->customs_tax_rate = $customDutyRate;
-        $invoice->total_cost = $totalCost;
+
+        $invoice->package_description = $customerPackage->packagedescription;
         $invoice->package_weight = $packageWeight;
+
+        $invoice->item_category = $request->input('itemcategory');
+        $invoice->shipping_cost = $shippingCost;
+        $invoice->shipping_cost_vat = $shippingCostVAT;
+        $invoice->shipping_cost_total = $shippingCostFinal;
+
+        $invoice->item_value = $request->input('itemvalue');
+        $invoice->customs_rate = $customDutyRate;
+        $invoice->customs_tax_amount = $customTaxAmount;
+        $invoice->customs_tax_amount_vat = $customTaxAmountVat;
+        $invoice->customs_tax_total = $customTaxFinal;
+        
+        $invoice->processing_fee = $processingFee;
+        $invoice->processing_fee_vat = $processingFeeVat;
+        $invoice->processing_fee_total = $processingFeeVatTotal;
+
+        $invoice->subtotal = $subTotal;
+        $invoice->subtotal_vat = $subTotalVat;
+        $invoice->final_total = $finalTotal;
         $invoice->save();
         return redirect('/inventorymanagement')->with('success',"Invoice Created");
     }
@@ -146,8 +174,13 @@ class ModifyInvoiceController extends Controller
             'itemvalue' => 'required'
         ]);
 
+        define("VAT_TAX_RATE",0.012); 
+        define("PROCESSING_FEE",10);
+
         $invoice = ThreeG_Invoices::find($id);
         $customerPackage = ReceivedPackages::find($request->input('packageid'));
+        //KW capture user inputs in variables
+
         //KW capture user inputs in variables
         $itemValue = $request->input('itemvalue');
         $shippingRate = $request->input('shippingrate');
@@ -155,27 +188,53 @@ class ModifyInvoiceController extends Controller
         $shippingRate = $request->input('shippingrate');
         $packageWeight = $request->input('packageweight');
         
-        $vatTax = $itemValue * 0.12;
-        $customsTax = $itemValue * $customDutyRate;
-        $shippingCost = ($itemValue * $shippingRate);
-        $customsVAT = $customsTax * 0.12;
-        
-        $processingFee = 10;//KW constant
-        $totalCost = $shippingCost + $customsTax + $customsVAT + $processingFee;    
-       
+        //KW declare variables that need to be calculated.
+        $shippingCost = $packageWeight * $shippingRate;
+        $shippingCostVAT = $shippingCost * VAT_TAX_RATE;
+        $shippingCostFinal = $shippingCost + $shippingCostVAT;
+
+        //KW calculate customs_rate
+        $customTaxAmount = $itemValue * ($customDutyRate/100);
+        $customTaxAmountVat = $customTaxAmount * VAT_TAX_RATE;
+        $customTaxFinal = $customTaxAmount + $customTaxAmountVat;
+
+        $processingFee = PROCESSING_FEE;
+        $processingFeeVat = PROCESSING_FEE * VAT_TAX_RATE;
+        $processingFeeVatTotal = $processingFee + $processingFeeVat;
+
+        $subTotal = $shippingCost + $customTaxAmount + $processingFee;
+        $subTotalVat = $shippingCostVAT + $customTaxAmountVat + $processingFeeVat;
+        $finalTotal = $shippingCostFinal + $customTaxFinal + $processingFeeVatTotal;
+
         $invoice->packageid = $request->input('packageid');
         $invoice->managerid = $customerPackage->managerid;
+        $invoice->manager_name = $customerPackage->managername;
         $invoice->package_description = $customerPackage->packagedescription;
+        $invoice->customer_id = $customerPackage->customerid;
         $invoice->customer_name = $customerPackage->customername;
         $invoice->package_tracking_number = $customerPackage->newtrackingnumberbarcode;
-        $invoice->shipping_cost = $shippingCost;
-        $invoice->item_value = $request->input('itemvalue');
-        $invoice->vat_tax = $vatTax;
-        $invoice->customs_tax = $customsTax;
-        $invoice->customs_vat = $customsVAT;
-        $invoice->customs_tax_rate = $customDutyRate;
+
+        $invoice->package_description = $customerPackage->packagedescription;
         $invoice->package_weight = $packageWeight;
-        $invoice->total_cost = $totalCost;
+
+        $invoice->item_category = $request->input('itemcategory');
+        $invoice->shipping_cost = $shippingCost;
+        $invoice->shipping_cost_vat = $shippingCostVAT;
+        $invoice->shipping_cost_total = $shippingCostFinal;
+
+        $invoice->item_value = $request->input('itemvalue');
+        $invoice->customs_rate = $customDutyRate;
+        $invoice->customs_tax_amount = $customTaxAmount;
+        $invoice->customs_tax_amount_vat = $customTaxAmountVat;
+        $invoice->customs_tax_total = $customTaxFinal;
+        
+        $invoice->processing_fee = $processingFee;
+        $invoice->processing_fee_vat = $processingFeeVat;
+        $invoice->processing_fee_total = $processingFeeVatTotal;
+
+        $invoice->subtotal = $subTotal;
+        $invoice->subtotal_vat = $subTotalVat;
+        $invoice->final_total = $finalTotal;
         $invoice->save();
         return redirect('/inventorymanagement')->with('success','Invoice Updated !');
 

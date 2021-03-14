@@ -4,9 +4,14 @@
 <h1>Receive Package</h1>
 <a href="/managepackages">Go Back</a>
 
+{{$customerpackage->id}}
+
+{{-- {{"Test" . $customerpackage->id}} --}}
+
 {!! Form::open(['action' => 'App\Http\Controllers\ManagePackagesController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
 <div class="form-group">
-    {{Form::hidden('customerid',$customerpackage->id,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
+    {{Form::hidden('customerid',$customerpackage->customerid,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
+    {{Form::hidden('customer_package_id',$customerpackage->id,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
 </div>
 
 <div class="form-group">

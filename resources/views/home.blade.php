@@ -32,7 +32,7 @@
                             </li>
                             <li>
                                 {{-- GenerateReport Controller --}}
-                                <a href="#">Generate Shipment Report</a>    
+                                <a href="/shipmentreport">Generate Shipment Report</a>    
                             </li>
 
                             <li>

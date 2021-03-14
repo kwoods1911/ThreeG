@@ -30,7 +30,7 @@
 
 <div class="form-group">
     {{Form::label('customdutyrate', 'Custom Duty Rate')}} <span>:</span>
-    {{Form::number('customdutyrate',$invoice[0]->customs_tax_rate,['placeholder' => 0.00])}}
+    {{Form::number('customdutyrate',$invoice[0]->customs_rate,['placeholder' => 0.00])}}
 </div>
 
 <div class="form-group">

@@ -49,6 +49,7 @@ Route::resource('customerpackage','App\Http\Controllers\CustomerPackagesControll
 Route::resource('managepackages','App\Http\Controllers\ManagePackagesController');
 Route::resource('inventorymanagement','App\Http\Controllers\InventoryManagementController');
 Route::resource('invoicemanagement','App\Http\Controllers\ModifyInvoiceController');
+Route::resource('shipmentreport','App\Http\Controllers\ShipmentReportController');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

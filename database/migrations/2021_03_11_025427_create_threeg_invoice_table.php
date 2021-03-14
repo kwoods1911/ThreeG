@@ -14,21 +14,38 @@ class CreateThreegInvoiceTable extends Migration
     public function up()
     {
         Schema::create('threeg_invoice', function (Blueprint $table) {
+            
             $table->id();
             $table->string('packageid');
             $table->string('managerid');
-            $table->mediumText('package_description');
+            $table->string('manager_name');
+            $table->string('customer_id');
             $table->string('customer_name');
             $table->string('package_tracking_number');
+
+
+            $table->mediumText('package_description');
             $table->integer('package_weight');
             $table->string('item_category');
             $table->double('shipping_cost');
-            $table->double('vat_tax');
-            $table->double('customs_tax_rate');
+            $table->double('shipping_cost_vat');
+            $table->double('shipping_cost_total');
+
+            
             $table->double('item_value');
-            $table->double('customs_tax');
-            $table->double('customs_vat');
-            $table->double('total_cost');
+            $table->double('customs_rate');
+            $table->double('customs_tax_amount');
+            $table->double('customs_tax_amount_vat');
+            $table->double('customs_tax_total');
+
+            $table->double('processing_fee');
+            $table->double('processing_fee_vat');
+            $table->double('processing_fee_total');
+
+
+            $table->double('subtotal');
+            $table->double('subtotal_vat');
+            $table->double('final_total');
             $table->timestamps();
         });
     }

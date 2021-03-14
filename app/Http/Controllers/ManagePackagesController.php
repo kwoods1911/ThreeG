@@ -80,8 +80,9 @@ class ManagePackagesController extends Controller
         $package->originaltrackingnumber = $request->input('originaltrackingnumber');
         $package->package_weight = $request->input('packageweight');
 
+        $customerPackageId = $request->input('customer_package_id');//KW unique Identifier used to run query in customerpackage table.
         //KW running a query to pull additional package information from database.
-        $customerPackageDBInfo = DB::select("SELECT * FROM customer_packages WHERE id = $package->customerid");
+        $customerPackageDBInfo = DB::select("SELECT * FROM customer_packages WHERE id = $customerPackageId");
         //KW convert database information to sring
         foreach ($customerPackageDBInfo as $packageInfo){
             $invoice_result = $packageInfo->customer_invoice;

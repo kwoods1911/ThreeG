@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ReceivedPackages;
+use App\Models\ThreeG_Invoices;
 class InventoryManagementController extends Controller
 {
     /**
@@ -88,7 +89,6 @@ class InventoryManagementController extends Controller
         $package->dateofarrival = $request->input('dateofarrival');
         $package->dateofdeparture = $request->input('dateofshipment');
         $package->save();
-
         return redirect('/inventorymanagement')->with('success','Package Details Updated !');
     }
 
@@ -100,6 +100,11 @@ class InventoryManagementController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //KW - on button click delete current item in inventory and also delete its corresponding invoices.
+        $package = ReceivedPackages::find($id);
+        $package->delete();
+        // ThreeG_Invoices::find($invoice->packageid == $package->id)->delete();
+        return redirect("/inventorymanagement")->with('success','Package Deleted!');
+
     }
 }
