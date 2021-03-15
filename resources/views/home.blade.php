@@ -34,21 +34,9 @@
                                 {{-- GenerateReport Controller --}}
                                 <a href="/shipmentreport">Generate Shipment Report</a>    
                             </li>
-
-                            <li>
-                                {{-- GenerateReport Controller --}}
-                                <a href="#">Schedule Delivery</a>    
-                            </li>
-
-                            <li>
-                                {{-- GenerateReport Controller --}}
-                                <a href="#">Generate Delivery Report</a>    
-                            </li>
-
                             
                             <li>
-                                {{-- GenerateDelivery Controller --}}
-                                <a href="#">Delivery List</a>    
+                                <a href="/manageaccounts">Manage Accounts</a>
                             </li>
                         </ul>
                         

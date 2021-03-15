@@ -53,17 +53,9 @@ class ShipmentReportController extends Controller
         $shipmentReport->date_of_report = Carbon::now();/**get current date */
         $shipmentReport->start_date = $startDate;
         $shipmentReport->end_date = $endDate;
-        $shipmentReport->save();    
-
-
-        
+        $shipmentReport->save();        
         //KW instead store search parameters for report.    
-
-
-
-         //KW - run query to get newly created report # and redirect user to that page.   
-         
-         
+        //KW - run query to get newly created report # and redirect user to that page.    
          return redirect('/shipmentreport')->with('success','Report Created !');
     }
 
@@ -90,22 +82,24 @@ class ShipmentReportController extends Controller
         //KW pass fetched data to the redirected page.
         $reportData = DB::table('received_packages')
                     ->join('threeg_invoice','threeg_invoice.packageid', '=', 'received_packages.id')
-                    ->select('received_packages.*')
+                    ->select('received_packages.*', 'threeg_invoice.final_total')
+                    ->whereDate('received_packages.dateofarrival', '>=', $startDate, 'AND' , 'received_packages.dateofdeparture','<=', $endDate)
                     ->get();
 
 return view('shipmentreport.show')->with('report_parameters',$reportParameters)
                                 ->with('report_data',$reportData);
-    }
+                                }
 
     /**
      * Show the form for editing the specified resource.
-     *
+      * @param  int  $id
      * @param  \App\Models\ShipmentReport  $shipmentReport
      * @return \Illuminate\Http\Response
      */
-    public function edit(ShipmentReport $shipmentReport)
+    public function edit($id)
     {
-        //
+        $report_parameters = ShipmentReport::find($id);
+        return view('shipmentreport.edit')->with('report_parameters',$report_parameters );
     }
 
     /**
@@ -113,11 +107,34 @@ return view('shipmentreport.show')->with('report_parameters',$reportParameters)
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\ShipmentReport  $shipmentReport
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ShipmentReport $shipmentReport)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'start_date' => 'required',
+            'end_date' => 'required'
+        ]);
+
+        $shipmentReport = ShipmentReport::find($id);
+        $shipmentReport->start_date = $request->input('start_date');
+        $shipmentReport->end_date = $request->input('end_date');
+        $shipmentReport->save();
+
+
+        $startDate = $shipmentReport->start_date;
+        $endDate = $shipmentReport->end_date;
+
+
+        
+        // $reportData = DB::table('received_packages')
+        // ->join('threeg_invoice','threeg_invoice.packageid', '=', 'received_packages.id')
+        // ->select('received_packages.*', 'threeg_invoice.final_total')
+        // ->whereDate('received_packages.dateofarrival', '>=', $startDate, 'AND' , 'received_packages.dateofdeparture','<=', $endDate)
+        // ->get();
+
+        return redirect("/shipmentreport")->with('success','Report Updated !');
     }
 
     /**
@@ -126,8 +143,11 @@ return view('shipmentreport.show')->with('report_parameters',$reportParameters)
      * @param  \App\Models\ShipmentReport  $shipmentReport
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ShipmentReport $shipmentReport)
+    public function destroy($id)
     {
-        //
+        //KW -finding specific report and deleting in data base.
+        $shipmentReport = ShipmentReport::find($id);
+        $shipmentReport->delete();
+        return redirect("/shipmentreport")->with('success','Report Deleted !');
     }
 }
