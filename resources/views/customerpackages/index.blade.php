@@ -4,6 +4,10 @@
 
 
     <h1>My Packages</h1>
+@php
+   //KW find package invoice 
+@endphp
+
 
     @if(count($customerPackages)>0)
     <a href="/customerpackage/create" class="btn btn-primary">Add Package</a>

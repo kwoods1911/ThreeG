@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 class ManageAccountsController extends Controller
 {
     /**
@@ -37,14 +38,41 @@ class ManageAccountsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'user_name' => 'required',
+            'name' => 'required',
             'email' => 'required',
             'confirm_email' => 'required',
             'password'=> 'required',
             'confirm_password' => 'required',
             'user_role' => 'required'
-
         ]);
+
+        //KW store request in variables
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $confirm_email = $request->input('confirm_email');
+        $password = $request->input('password');
+        $confirm_password = $request->input('confirm_password');
+        $user_role = $request->input('user_role');
+
+
+        //KW test that the emails match and that the password match. 
+        if($email !== $confirm_email){//KW emails do not match
+            return redirect('/manageaccounts/create')->with('error', 'Error emails do not match.');
+        }elseif($password !== $confirm_password){//KW password do not match
+            return redirect('/manageaccounts/create')->with('error', 'Error password do not match.');
+        }else{
+            //KW everyone matches create account
+            $account = new User;
+            $account->name = $name;
+            $account->email = $email;
+            $account->password =Hash::make($password);
+            $account->user_role = $user_role;
+            $account->save();
+            return redirect('/manageaccounts/create')->with('success', 'Account created!');
+        }
+        
+        
+        //KW present appropriate error message if error occurs.
     }
 
     /**
@@ -67,7 +95,8 @@ class ManageAccountsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view('manageaccounts.edit')->with('account',$user);
     }
 
     /**
@@ -79,7 +108,39 @@ class ManageAccountsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required',
+            'email' => 'required',
+            'confirm_email' => 'required',
+            'password'=> 'required',
+            'confirm_password' => 'required',
+            'user_role' => 'required'
+        ]);
+
+                //KW store request in variables
+                $name = $request->input('name');
+                $email = $request->input('email');
+                $confirm_email = $request->input('confirm_email');
+                $password = $request->input('password');
+                $confirm_password = $request->input('confirm_password');
+                $user_role = $request->input('user_role');
+        
+        
+                //KW test that the emails match and that the password match. 
+                if($email !== $confirm_email){//KW emails do not match
+                    return redirect('/manageaccounts/create')->with('error', 'Error emails do not match.');
+                }elseif($password !== $confirm_password){//KW password do not match
+                    return redirect('/manageaccounts/create')->with('error', 'Error password do not match.');
+                }else{
+                    //KW everyone matches create account
+                    $account = User::find($id);
+                    $account->name = $name;
+                    $account->email = $email;
+                    $account->password = Hash::make($password);
+                    $account->user_role = $user_role;
+                    $account->save();
+                    return redirect("/manageaccounts")->with('success', 'Account Updated!');
+                }
     }
 
     /**

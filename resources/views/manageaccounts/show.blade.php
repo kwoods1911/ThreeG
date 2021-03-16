@@ -5,9 +5,9 @@
 <h1>Account Information</h1>
 
 <a href="/manageaccounts" class="btn btn-primary">
-    <span><<</span>
+    <span><<  </span>
     Go Back</a>
-<table>
+<table class="table table-striped table-hover">
     <tr>
         <th>Account #</th>
         <td>{{$account->id}}</td>
@@ -35,6 +35,6 @@
     </tr>
 </table>
 
-
+<a href="/manageaccounts/{{$account->id}}/edit" class="btn btn-primary"> Edit Acount Information</a>
 
 @endsection
