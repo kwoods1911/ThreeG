@@ -21,7 +21,9 @@ Route::get('/about', 'App\Http\Controllers\PagesController@about');//KW Route to
 
 Route::get('/services', 'App\Http\Controllers\PagesController@services');//KW Route to services page of application.
 
-Route::get('/show-pdf/{id}','App\Http\Controllers\PagesController@viewpdf');
+Route::get('/show-pdf/{id}','App\Http\Controllers\PagesController@viewpdf');//KW route for viewing the customer's uploaded pdf.
+
+Route::get('/show-bill/{trackingnumber}','App\Http\Controllers\PagesController@viewbill');
 
 
 Route::get('/managepackages/create/{id}','App\Http\Controllers\ManagePackagesTest@create');

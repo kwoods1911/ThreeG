@@ -1,6 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
+
+@php
+//KW run query to find corresponding customer id to package it.
+use App\Models\CustomerPackage;
+use Illuminate\Support\Facades\DB;
+$trackingNumber = $package->newtrackingnumberbarcode;
+$customerPackageNumber = DB::select("SELECT id FROM customer_packages WHERE newtrackingnumber = $trackingNumber");
+//KW select customer package from
+    
+@endphp
+
+
+
 <h1>Shipment Details</h1>
 
 <h4>Manager ID: {{$package->managerid}}</h4>
@@ -46,6 +59,14 @@
     <tr>
         <th>Delivery Method</th>
         <td>{{$package->deliverycustomercollection}}</td>
+    </tr>
+
+    <tr>
+        <th>Package Invoice</th>
+        <td>
+            <a target="_blank" href="/show-pdf/{{$customerPackageNumber[0]->id}}" class="btn btn-primary" >View Invoice</a>
+        </td>
+       
     </tr>
 
 </table>

@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Student: Khari Woods
+ * Course CIS2261
+ * Date: March 19, 2020
+ * Controller Description: This controller is reponsible for receiving all packages that are uploaded by the customer.
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -30,7 +35,11 @@ class ManagePackagesController extends Controller
         //KW run a comparison to what exist already in the packages database.
         //KW if the package already exists then filter it out from the results.
 
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
         return view('managepackages.index')->with('customerPackages',$customerPackages);
+        }
     }
 
     /**
@@ -44,7 +53,11 @@ class ManagePackagesController extends Controller
         //KW populate form with trackining number data.
         //KW store record of package in database.
         $customerPackages = CustomerPackage::all();
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
         return view('managepackages.create');
+        }
     }
 
     /**

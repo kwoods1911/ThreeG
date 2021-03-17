@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Student: Khari Woods
+ * Course CIS2261
+ * Date: March 19, 2020
+ * Controller Description: This controller is reponsible for managing a user packages.
+ * This will be accessible by administrators and basic customers
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -50,7 +56,7 @@ class CustomerPackagesController extends Controller
      */
     public function store(Request $request)
     {
-        //KW - adding logic to store information
+        //KW - adding logic to store information in package.
         $this->validate($request,[
             'originaltrackingnumber' => 'required',
             'packagedescription' => 'required',
@@ -59,7 +65,6 @@ class CustomerPackagesController extends Controller
         ]);
 
         //KW checking if user has opted to upload file.
-
         if($request->hasFile('customer_invoice')){
             //get file name with extensions
             // $fileNameWithExt = $request->file('customer_invoice')->getCliendOriginalImage();
@@ -74,15 +79,15 @@ class CustomerPackagesController extends Controller
         }else{
             $fileNameToStore = 'noinvoice.pdf';//KW - default pdf file.
         }
-        $utility = new UtilitiesController;
-        $customerPackages = new CustomerPackage;
-        $users = User::find($customerPackages->id);
+        $utility = new UtilitiesController;//KW creating utility controller
+        $customerPackages = new CustomerPackage;//KW creating an instance of customer package.
+        $users = User::find($customerPackages->id);//KW finding user based on specific package id.
 
 
         //KW match user id with correct package
-        // $findCustomerID = CustomerPackage::find($id);
-        // $name = $users->getName();
-        $customerPackages->user_id = auth()->user()->id;
+
+        //KW storing packing information to customerpackages database table
+        $customerPackages->user_id = auth()->user()->id;//KW ensuring that and authorized user is uploading a package.
         $customerPackages->customerid = '456';
         $customerPackages->customername = auth()->user()->name;
         $customerPackages->newtrackingnumber = $utility->generateTrackingNumber(7);
@@ -90,8 +95,9 @@ class CustomerPackagesController extends Controller
         $customerPackages->packagedescription = $request->input('packagedescription');
         $customerPackages->delivery_method = $request->input('pickupordelivery');
         $customerPackages->customer_invoice = $fileNameToStore;
-        $customerPackages->save();
+        $customerPackages->save();//KW saving package information to database
         
+        //KW if package is succesfully saved a message is sent.
         return redirect('/customerpackage')->with('success','Package Uploaded');
     }
 
@@ -104,7 +110,13 @@ class CustomerPackagesController extends Controller
     public function show($id)
     {
         $customerPackages = CustomerPackage::find($id);
-        return view('customerpackages.show')->with('customerPackages',$customerPackages);
+        $trackingnumber = $customerPackages->newtrackingnumber;
+        
+        //KW run query on the received_packages table to find the matching information.
+        $packageInformation = DB::select("SELECT * FROM received_packages WHERE newtrackingnumberbarcode = $trackingnumber");
+        
+        return view('customerpackages.show')->with('customerPackages',$customerPackages)
+                ->with('packageInformation',$packageInformation);
     }
 
     /**
@@ -149,8 +161,6 @@ class CustomerPackagesController extends Controller
         }else{
             $fileNameToStore = $customerPackages->customer_invoice;
         }
-                
-
             //KW match user id with correct package
             // $name = $users->getName();
             $customerPackages->customerid = '456';//KW write script to generate customer ID.
@@ -161,7 +171,6 @@ class CustomerPackagesController extends Controller
             $customerPackages->delivery_method = $request->input('pickupordelivery');
             $customerPackages->customer_invoice = $fileNameToStore;
             $customerPackages->save();
-            
             return redirect('/customerpackage')->with('success','Package Details Updated !');
     }
 

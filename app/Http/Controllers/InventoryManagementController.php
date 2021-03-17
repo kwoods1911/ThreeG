@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Student: Khari Woods
+ * Course CIS2261
+ * Date: March 19, 2020
+ * Controller Description: This controller is reponsible for managing the inventory of the warehouse.
+ */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,7 +23,11 @@ class InventoryManagementController extends Controller
     {
         //KW - Pull all packages from received packages database.
         $inventorypackages = ReceivedPackages::all();
-        return view('inventorymanagement.index')->with('inventorypackages',$inventorypackages);
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
+            return view('inventorymanagement.index')->with('inventorypackages',$inventorypackages);
+        }
     }
 
     /**
@@ -48,8 +59,13 @@ class InventoryManagementController extends Controller
      */
     public function show($id)
     {
+        //KW find packaged based on ID passed in through the parameter
         $package = ReceivedPackages::find($id);
-        return view("inventorymanagement.show")->with('package',$package);
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
+        return view("inventorymanagement.show")->with('package',$package);//KW passing package into the page as a variable
+        }
     }
 
     /**
@@ -60,8 +76,13 @@ class InventoryManagementController extends Controller
      */
     public function edit($id)
     {
+        //KW find packaged based on ID passed in through the parameter
         $package = ReceivedPackages::find($id);
-        return view('inventorymanagement.edit')->with('package',$package);
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
+            return view('inventorymanagement.edit')->with('package',$package);//KW passing package into the page as a variable
+        }
     }
 
     /**
@@ -73,22 +94,21 @@ class InventoryManagementController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //KW quering database for specific package to be updated.
         $package = ReceivedPackages::find($id);
-
         $this->validate($request,[
             'packageweight' => 'required',
             'locationstatus'=> 'required',
-            'packagedescription' => 'required',
             'dateofarrival' => 'required',
             'dateofshipment' => 'required'
         ]);
 
+        //KW updating package based on user inputs.
         $package->package_weight = $request->input('packageweight');
-        $package->packagedescription = $request->input('packagedescription');
         $package->locationstatus = $request->input('locationstatus');
         $package->dateofarrival = $request->input('dateofarrival');
         $package->dateofdeparture = $request->input('dateofshipment');
-        $package->save();
+        $package->save();//KW saving updates to database
         return redirect('/inventorymanagement')->with('success','Package Details Updated !');
     }
 
@@ -102,9 +122,8 @@ class InventoryManagementController extends Controller
     {
         //KW - on button click delete current item in inventory and also delete its corresponding invoices.
         $package = ReceivedPackages::find($id);
-        $package->delete();
-        // ThreeG_Invoices::find($invoice->packageid == $package->id)->delete();
-        return redirect("/inventorymanagement")->with('success','Package Deleted!');
+        $package->delete();//KW deleting record from database
+        return redirect("/inventorymanagement")->with('success','Package Deleted!');//KW sending confirmation message to page.
 
     }
 }

@@ -1,9 +1,20 @@
 <?php
-
+/**
+ * Student: Khari Woods
+ * Course CIS2261
+ * Date: March 19, 2020
+ * Controller Description: This controller is reponsible for managing the basic pages of the website.
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//KW importing Models to be used
 use App\Models\CustomerPackage;
+use App\Models\ReceivedPackages;
+use App\Models\ThreeG_Invoices;
+use DB;
+
+
 use App\Http\Controllers\CustomerPackagesController;
 class PagesController extends Controller
 {
@@ -31,5 +42,20 @@ class PagesController extends Controller
         $file = CustomerPackage::find($id);
         // return view('pages.about')->with('title', $file->customer_invoice);
         return response()->file('public\customer_invoices\\'.$file->customer_invoice);
+    }
+
+    public function viewbill($trackingnumber){
+        //KW select $id where tracking number is equal to $id.
+        // $invoice = DB::select("SELECT * FROM threeg_invoice WHERE packageid = $id");
+        $invoiceID = DB::select("SELECT id FROM threeg_invoice WHERE  package_tracking_number = $trackingnumber");
+        if($invoiceID == null){
+            return view('customerpackages.invoicepending');
+        }else{
+            $invoice = ThreeG_Invoices::find($invoiceID[0]->id);
+            return view('customerpackages.viewbill')->with('invoice',$invoice);
+        }
+        
+        //KW find package invoice and redirect user to that page
+        // return redirect("/invoicemanagement/{{$invoice->id}"); 
     }
 }

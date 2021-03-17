@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Student: Khari Woods
+ * Course CIS2261
+ * Date: March 19, 2020
+ * Controller Description: This controller is reponsible for creating the reports for the packages that have been 
+ * received in the inventory.
+ */
 namespace App\Http\Controllers;
 
 use App\Models\ShipmentReport;
@@ -17,7 +23,11 @@ class ShipmentReportController extends Controller
     {
         //KW - pull information from database.
         $reports = ShipmentReport::all();
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
         return view('shipmentreport.index')->with('reports',$reports);
+        }
     }
 
 
@@ -28,7 +38,11 @@ class ShipmentReportController extends Controller
      */
     public function create()
     {
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
         return view('shipmentreport.create');
+        }
     }
 
     /**
@@ -86,8 +100,15 @@ class ShipmentReportController extends Controller
                     ->whereDate('received_packages.dateofarrival', '>=', $startDate, 'AND' , 'received_packages.dateofdeparture','<=', $endDate)
                     ->get();
 
-return view('shipmentreport.show')->with('report_parameters',$reportParameters)
-                                ->with('report_data',$reportData);
+                    
+
+        if(auth()->user()->user_role == 'customer'){
+                        return redirect('/home');
+                    }else{
+                        return view('shipmentreport.show')->with('report_parameters',$reportParameters)
+                        ->with('report_data',$reportData);
+                    }
+
                                 }
 
     /**
@@ -99,7 +120,12 @@ return view('shipmentreport.show')->with('report_parameters',$reportParameters)
     public function edit($id)
     {
         $report_parameters = ShipmentReport::find($id);
+
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
         return view('shipmentreport.edit')->with('report_parameters',$report_parameters );
+        }
     }
 
     /**

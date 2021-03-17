@@ -3,7 +3,9 @@
 <h1>Prepare Shipment</h1>
 <a href="/inventorymanagement">Go Back</a>
 
-{!! Form::open(['action' => 'App\Http\Controllers\ManagePackagesController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+{{-- {!! Form::open(['action' => ['App\Http\Controllers\ManageAccountsController@update', $account->id], 'method' => 'POST']) !!} --}}
+
+{!! Form::open(['action' => ['App\Http\Controllers\InventoryManagementController@update',$package->id], 'method' => 'POST']) !!}
 <div class="form-group">
     {{Form::hidden('customerid',$package->id,['class' => 'form-control', 'placeholder' => 'Customer id'])}}
 </div>
@@ -52,6 +54,7 @@
     {{Form::label('dateofshipment', 'Date of shipment')}} <span>:</span>
     {{Form::date('dateofshipment', \Carbon\Carbon::now())}}
 </div>
+{{Form::hidden('_method','PUT')}}
 {{Form::submit('Edit Shipment Detail',['class' => 'btn btn-primary'])}}
 {!! Form::close() !!}
 @endsection

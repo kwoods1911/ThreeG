@@ -4,9 +4,7 @@
 
 
     <h1>My Packages</h1>
-@php
-   //KW find package invoice 
-@endphp
+
 
 
     @if(count($customerPackages)>0)
@@ -27,8 +25,14 @@
     {{-- <td>{{$customerPackage->customerid}}</td> --}}
     <td>{{$customerPackage->newtrackingnumber}}</td>
     <td>{{$customerPackage->packageDescription}}</td>
-    <td><a href="#">Invoice Pending</a></td>
-    <td><a href="/customerpackage/{{$customerPackage->id}}">View Details</a></td>
+    <td>
+        <a href="/show-bill/{{$customerPackage->newtrackingnumber}}" class="btn btn-primary">
+        View Bill
+    </a>
+    </td>
+    <td><a href="/customerpackage/{{$customerPackage->id}}" class="btn btn-primary">
+        View Details</a>
+    </td>
     {{-- <td><a href="/customerpackage/{{$customerPackage->id}}/edit" class="btn btn-primary">Edit</a></td> --}}
     <td>
         {!!Form::open(['action' => ['App\Http\Controllers\CustomerPackagesController@destroy', $customerPackage->id], 'method' => 'POST'])!!}

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Student: Khari Woods
+ * Course CIS2261
+ * Date: March 19, 2020
+ * Controller Description: Controller is responsible for managing all accounts in the system.
+ * This controller should only be accessible by administrators.
+ */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,7 +24,12 @@ class ManageAccountsController extends Controller
     {
         //KW display a list of all accounts
         $accounts = User::all();//KW returning all user accounts to index
-        return view('manageaccounts.index')->with('accounts',$accounts); 
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
+            return view('manageaccounts.index')->with('accounts',$accounts);
+        }
+        
     }
 
     /**
@@ -26,7 +39,13 @@ class ManageAccountsController extends Controller
      */
     public function create()
     {
-        return view('manageaccounts.create');
+    
+        //KW preventing unauthorized user from entering a page.
+    if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
+            return view('manageaccounts.create');
+        }
     }
 
     /**
@@ -68,11 +87,11 @@ class ManageAccountsController extends Controller
             $account->password =Hash::make($password);
             $account->user_role = $user_role;
             $account->save();
-            return redirect('/manageaccounts/create')->with('success', 'Account created!');
+            return redirect('/manageaccounts/create')->with('success', 'Account created!'); //KW present appropriate error message if error occurs.
         }
         
         
-        //KW present appropriate error message if error occurs.
+       
     }
 
     /**
@@ -84,7 +103,12 @@ class ManageAccountsController extends Controller
     public function show($id)
     {
         $user = User::find($id);
+
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
         return view('manageaccounts.show')->with('account',$user);
+        }
     }
 
     /**
@@ -96,7 +120,11 @@ class ManageAccountsController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        return view('manageaccounts.edit')->with('account',$user);
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
+            return view('manageaccounts.edit')->with('account',$user);
+        }
     }
 
     /**

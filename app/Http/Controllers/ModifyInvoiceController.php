@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Student: Khari Woods
+ * Course CIS2261
+ * Date: March 19, 2020
+ * Controller Description: This controller is responsible for modifying the invoice.
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -18,7 +23,11 @@ class ModifyInvoiceController extends Controller
     {
         //
         $package = ReceivedPackages::all();
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
         return view('invoice.createinvoice');
+        }
     }
 
     /**
@@ -132,7 +141,12 @@ class ModifyInvoiceController extends Controller
 
         $package = ReceivedPackages::find($id);
         $invoice = ThreeG_Invoices::where('packageid',$package->id)->firstOrFail();
-        return view('invoice.showinvoice')->with('invoice',$invoice);
+
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
+            return view('invoice.showinvoice')->with('invoice',$invoice);
+        }
 
         // return view('invoice.showinvoice');
     }
@@ -150,7 +164,12 @@ class ModifyInvoiceController extends Controller
         $invoice = DB::select("SELECT * FROM threeg_invoice WHERE packageid = $id");
         // fetch_assoc
         $package = ReceivedPackages::find($id);
-        return view('invoice.updateinvoice')->with('invoice',$invoice)->with('package',$package);
+
+        if(auth()->user()->user_role == 'customer'){
+            return redirect('/home');
+        }else{
+            return view('invoice.updateinvoice')->with('invoice',$invoice)->with('package',$package);
+        }
     }
 
     /**
