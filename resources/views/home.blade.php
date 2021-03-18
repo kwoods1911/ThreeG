@@ -41,7 +41,7 @@
                         </ul>
                         
                     @endif
-
+                        <img src="#" alt="insert background image">
                 </div>
             </div>
         </div>
